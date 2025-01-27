@@ -37,6 +37,12 @@ view: order_items {
     sql: ${TABLE}.inventory_item_id ;;
   }
 
+  dimension: shipping_days {
+    type: number
+    sql: DATE_DIFF(${shipped_date}, ${created_date}, DAY);;
+  }
+
+
   dimension: order_id {
     type: number
     # hidden: yes
@@ -85,6 +91,30 @@ view: order_items {
     }
     sql: ${TABLE}.sale_price ;;
   }
+
+  measure: total_sales {
+    type: sum
+    value_format_name: usd
+    sql: ${TABLE}.sale_price ;;
+  }
+
+  measure: total_sales_email_users {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    filters: [users.traffic_source: "Email"]
+  }
+
+
+  measure: percentage_sales_email_source {
+    type: number
+    value_format_name: percent_2
+    sql: 1.0*${total_sales_email_users}
+      / NULLIF(${total_sales}, 0) ;;
+  }
+
+
+
 
   measure: count {
     type: count

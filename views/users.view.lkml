@@ -127,10 +127,33 @@ view: users {
     sql: ${TABLE}.traffic_source ;;
   }
 
+  dimension: is_new_customer {
+    type: yesno
+    sql: ${days_since_signup} <= 1000 ;;
+  }
+
+  dimension: is_email_source {
+    type: yesno
+    sql: ${traffic_source} = "Email" ;;
+  }
+
+
+
   dimension: user_geom {
     type: string
     sql: ${TABLE}.user_geom ;;
   }
+
+
+  measure: count_female_users {
+    type: count
+    filters: {
+      field: gender
+      value: "F"
+    }
+  }
+
+
   measure: count {
     type: count
     drill_fields: [detail*]
