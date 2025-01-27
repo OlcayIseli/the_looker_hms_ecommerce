@@ -76,6 +76,16 @@ view: order_items {
     # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
+
+  measure: Total_sale_price_completed {
+    type: sum
+    filters: {
+      field: status
+      value: "Complete"
+    }
+    sql: ${TABLE}.sale_price ;;
+  }
+
   measure: count {
     type: count
     drill_fields: [detail*]
@@ -84,16 +94,16 @@ view: order_items {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-	id,
-	users.last_name,
-	users.id,
-	users.first_name,
-	inventory_items.id,
-	inventory_items.product_name,
-	products.name,
-	products.id,
-	orders.order_id
-	]
+  id,
+  users.last_name,
+  users.id,
+  users.first_name,
+  inventory_items.id,
+  inventory_items.product_name,
+  products.name,
+  products.id,
+  orders.order_id
+  ]
   }
 
 }
